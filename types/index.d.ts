@@ -7,7 +7,7 @@ import {
   Operation,
   NextLink,
 } from '@apollo/client'
-import { CreateClientParams } from 'contentful'
+import { ContentfulClientApi, CreateClientParams } from 'contentful'
 
 export declare namespace ContentfulRestLink {
   export interface ClientOptions extends CreateClientParams {
@@ -20,8 +20,10 @@ export declare namespace ContentfulRestLink {
 }
 
 export declare class ContentfulRestLink extends ApolloLink {
-  private clientOptions?: ContentfulRestLink.ClientOptions;
-  private queryDefaults?: ContentfulRestLink.QueryDefaults;
+  public clientOptions?: ContentfulRestLink.ClientOptions;
+  public queryDefaults?: ContentfulRestLink.QueryDefaults;
+  public client?: ContentfulClientApi;
+  public previewClient?: ContentfulClientApi;
 
   constructor(
     clientOptions: ContentfulRestLink.ClientOptions,
