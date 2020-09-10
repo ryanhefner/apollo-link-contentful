@@ -97,5 +97,12 @@
     "rollup-plugin-terser": "^7.0.2",
     "subscriptions-transport-ws": "^0.9.18",
     "typescript": "^4.0.2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/**/*.test.js"
+    ]
   }
 }
