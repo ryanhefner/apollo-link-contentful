@@ -6,6 +6,9 @@
 [![Coveralls github](https://img.shields.io/coveralls/github/ryanhefner/apollo-link-contentful?style=flat-square)](https://coveralls.io/github/ryanhefner/apollo-link-contentful)
 ![CircleCI](https://img.shields.io/circleci/build/github/ryanhefner/apollo-link-contentful?style=flat-square)
 
+> 🚨 very alpha! in active development. 🚨
+> All minor version changes (0.X.0) are likely to have breaking changes.
+
 Perform GraphQL queries against Contentful’s Rest API. No more, query size limits! No more, query complexities!!
 
 ## Install
