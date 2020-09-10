@@ -43,6 +43,7 @@ export const getRootKey = (operation) => {
  */
 const contentfulReservedParameters = [
   'access_token',
+  'id',
   'include',
   'locale',
   'content_type',
