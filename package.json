@@ -1,0 +1,101 @@
+{
+  "name": "apollo-link-contentful",
+  "version": "0.1.0",
+  "description": "Perform GraphQL queries against Contentful’s Rest API. No more, query size limits! No more, query complexities!!",
+  "scripts": {
+    "clean": "rimraf constants.js ContentfulRestLink.js index.js utils.js es umd",
+    "prebuild": "npm run clean",
+    "build": "node ./tools/build.js",
+    "watch": "babel ./src -d . --ignore __mocks__,__tests__,**/*.test.js --watch",
+    "prepare": "npm run build",
+    "prepublishOnly": "node ./tools/build.js",
+    "push-release": "git push origin master && git push --tags",
+    "dtslint": "dtslint types",
+    "test": "jest"
+  },
+  "repository": "ryanhefner/apollo-link-contentful",
+  "keywords": [
+    "apollo",
+    "apollo-link",
+    "graphql",
+    "graphql-anywhere",
+    "contentful",
+    "contentful-api",
+    "contentful-graphql-api",
+    "contentful-rest-api",
+    "contentful-js"
+  ],
+  "author": "Ryan Hefner <hi@ryanhefner.com> (https://www.ryanhefner.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ryanhefner/apollo-link-contentful/issues"
+  },
+  "homepage": "https://github.com/ryanhefner/apollo-link-contentful#readme",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/ryanhefner"
+    },
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/ryanhefner"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/ryanhefner"
+    }
+  ],
+  "files": [
+    "es",
+    "src",
+    "types",
+    "umd",
+    "constants.js",
+    "ContentfulRestLink.js",
+    "index.js",
+    "utils.js"
+  ],
+  "directories": {
+    "lib": "/src"
+  },
+  "main": "index.js",
+  "module": "es/index.js",
+  "jsnext:main": "src/index.js",
+  "types": "types",
+  "dependencies": {
+    "@apollo/client": "^3.1.5",
+    "@babel/runtime": "^7.11.2",
+    "contentful": "^7.14.6",
+    "contentful-parsers": "^1.2.6",
+    "graphql-anywhere": "^4.2.7",
+    "lomit": "^0.3.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "@rollup/plugin-babel": "^5.2.1",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "babel-plugin-dev-expression": "^0.2.2",
+    "coveralls": "^3.1.0",
+    "dtslint": "^4.0.0",
+    "graphql": "^15.3.0",
+    "greenkeeper-lockfile": "^1.15.1",
+    "gzip-size": "^5.1.1",
+    "jest": "^26.4.2",
+    "pretty-bytes": "^5.4.1",
+    "react": "^16.13.1",
+    "regenerator-runtime": "^0.13.7",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.26.11",
+    "rollup-plugin-terser": "^7.0.2",
+    "subscriptions-transport-ws": "^0.9.18",
+    "typescript": "^4.0.2"
+  }
+}
