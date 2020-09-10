@@ -46,7 +46,7 @@ and `locale` specifies the localization of the entry(ies) returned, [Localizatio
 ```js
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import { ContentfulRestLink } from 'apollo-link-contentful'
-import introspectionQueryResultData from 'schema/possibleTypes.json'
+import possibleTypes from 'types/possibleTypes.json'
 
 const space = process.env.CONTENTFUL_SPACE
 const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN
