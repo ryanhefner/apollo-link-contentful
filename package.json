@@ -1,6 +1,6 @@
 {
   "name": "apollo-link-contentful",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Perform GraphQL queries against Contentful’s Rest API. No more, query size limits! No more, query complexities!!",
   "scripts": {
     "clean": "rimraf constants.js ContentfulRestLink.js index.js utils.js es umd",
