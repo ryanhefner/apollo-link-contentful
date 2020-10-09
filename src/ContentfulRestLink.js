@@ -1,5 +1,5 @@
 import { ApolloLink, Observable } from '@apollo/client'
-import omit from 'lomit'
+import { omit } from 'lomit'
 import { graphql } from 'graphql-anywhere/lib/async'
 import { contentfulResolver, graphqlParser } from 'contentful-parsers'
 const contentful = require('contentful')

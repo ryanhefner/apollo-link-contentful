@@ -1,4 +1,4 @@
-import omit from 'lomit'
+import { omit } from 'lomit'
 import {
   DefinitionKind,
   SelectionKind,
