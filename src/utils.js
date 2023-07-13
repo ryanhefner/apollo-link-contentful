@@ -105,6 +105,42 @@ const getSearchKey = (variableKey) => {
 }
 
 /**
+ * Convert `order` arguments to the expected format that works with the REST API.
+ *
+ * @param {string} orderValue
+ * @return {string}
+ */
+const getOrderValue = (orderValue) => {
+  if (!orderValue || typeof orderValue !== 'string') return orderValue
+
+  // Convert separators to dot notation
+  orderValue = orderValue.replace(/_/g, '.')
+
+  // Prepend `fields.` for instances not prefixed by `sys.`
+  if (!orderValue.startsWith('sys.')) {
+    orderValue = `fields.${orderValue}`
+  }
+
+  // Convert ordering direction
+  if (orderValue.endsWith('.DESC')) {
+    orderValue = `-${orderValue.replace('.DESC', '')}`
+  } else if (orderValue.endsWith('.ASC')) {
+    orderValue = orderValue.replace('.ASC', '')
+  }
+
+  // Convert sys date fields to REST equivalents
+  if (orderValue.includes('sys.firstPublishedAt')) {
+    orderValue = orderValue.replace('sys.firstPublishedAt', 'sys.createdAt')
+  }
+
+  if (orderValue.includes('sys.publishedAt')) {
+    orderValue = orderValue.replace('sys.publishedAt', 'sys.updatedAt')
+  }
+
+  return orderValue
+}
+
+/**
  * Build a map that associates the variables passed into the query
  * with the actual fields/arguments that are being requested in the
  * API request.
@@ -246,11 +282,64 @@ export const parseQueryVariables = (operation) => {
   const { variables } = operation
   const variableMap = buildVariableMap(operation)
 
-  const operationVariables = getRootQuery(operation)
+  const operationDefinition = getRootQuery(operation)
     .definitions
     .find(definition => definition.kind === DefinitionKind.OperationDefinition)
+
+  const operationVariables = operationDefinition
     .variableDefinitions
     .map(variableDefinition => variableDefinition.variable.name.value)
+
+  const operationArguments = operationDefinition
+    .selectionSet
+    .selections[0].arguments.map(argument => {
+      let value = null
+
+      if (!argument?.name?.value) {
+        return null
+      }
+
+      switch (argument?.value?.kind) {
+        // @todo Add case for 'ObjectField' - Ryan
+        // @todo Add case for 'ObjectValue' - Ryan
+        case 'ListValue':
+          value = (argument?.value?.values ?? []).map((argumentValue) => {
+            switch (argument?.name?.value) {
+              case 'order':
+                return getOrderValue(argumentValue?.value)
+
+              default:
+                return argumentValue?.value
+            }
+          }).join(',')
+          break
+
+        case 'BooleanValue':
+        case 'EnumValue':
+        case 'FloatValue':
+        case 'IntValue':
+        case 'StringValue':
+          value = argument?.value?.value
+          break
+
+        case 'Variable':
+          value = argument?.value?.name?.value
+          break
+
+        default:
+          break
+      }
+
+      if (!value) {
+        return null
+      }
+
+      return { [argument.name.value]: value }
+    })
+    .filter((item) => !!item)
+    .reduce((acc, cur) => {
+      return { ...acc, ...cur }
+    }, {})
 
   const operationQueries = Object.keys(variableMap)
     .filter(variableKey => {
@@ -270,6 +359,17 @@ export const parseQueryVariables = (operation) => {
               // Exclude preview variable is not set to true
               if (variableMap[variableKey].field === 'preview' && !variables[variableKey]) {
                 return null
+              }
+
+              if (variableMap[variableKey].field === 'order') {
+                return { [variableMap[variableKey].field]: variables[variableKey]
+                  .map(orderVariable => getOrderValue(orderVariable))
+                  .join(',')
+                }
+              }
+
+              if (variableMap[variableKey].field === 'where') {
+                // @todo Spread out arguments defined in `where` field - Ryan
               }
 
               return { [variableMap[variableKey].field]: variables[variableKey] }
@@ -292,7 +392,11 @@ export const parseQueryVariables = (operation) => {
     .filter(variable => !!variable)
     .reduce((acc, cur) => {
       return {...acc, ...cur }
-    }, {});
+    }, {})
 
-  return { ...operationQueries, ...omit(variables, operationVariables) }
+  return {
+    ...operationArguments,
+    ...operationQueries,
+    ...omit(variables, operationVariables)
+  }
 }

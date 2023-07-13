@@ -10,7 +10,7 @@ const plugins = [
 
 if (process.env.NODE_ENV === 'production') {
   plugins.push(
-    'babel-plugin-dev-expression',
+    // 'babel-plugin-dev-expression',
   );
 }
 

@@ -43,6 +43,8 @@ export class ContentfulRestLink extends ApolloLink {
   request(operation, forward) {
     const { query, operationName } = operation
 
+    console.debug(JSON.stringify(operation))
+
     const obs = forward
       ? forward(operation)
       : Observable.of({ data: {} })
@@ -75,6 +77,8 @@ export class ContentfulRestLink extends ApolloLink {
         && queryVariables.preview
       const client = usePreview ? this.previewClient : this.client
 
+      console.debug(queryVariables)
+
       // Contentful query
       client[queryMethod](...queryArgs)
         .then(contentfulData => {
@@ -87,8 +91,6 @@ export class ContentfulRestLink extends ApolloLink {
             contentfulData,
             definitionMap[operationName]
           )
-
-          // console.debug(contentfulData, parsedData)
 
           // Query contentfulData via GraphQL query
           graphql(
